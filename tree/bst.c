@@ -113,3 +113,27 @@ int countInternalNodes(BinarySearchTree bst){
 	else
 		return 0;	
 }
+
+
+void printAncestors(BinarySearchTree bst, int data){
+	if(!bst)
+		return;
+
+	if(bst->data == data)
+		return;
+	else if(bst -> data < data)
+		displayAncestors(bst->right,data);
+	else
+		displayAncestors(bst->left,data);
+	printf("%d <-",bst->data);
+return;
+}
+
+void displayAncestors(BinarySearchTree bst, int data){
+
+	if(!search(bst,data)){
+		return;
+	}
+	printAncestors(bst,data);
+	return;
+}	
