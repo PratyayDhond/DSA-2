@@ -13,16 +13,16 @@ int main(){
 	BinarySearchTree t;
 	initBst(&t);
 	
-	insert(&t,6);
-	insert(&t,3);
-	insert(&t,18);
-	insert(&t,2);
-	insert(&t,5);
-	insert(&t,1);
-	insert(&t,4);
-	insert(&t,15);
-	insert(&t,27);
-	insert(&t,16);
+	insertRecursively(&t,6);
+	insertRecursively(&t,3);
+	insertRecursively(&t,18);
+	insertRecursively(&t,2);
+	insertRecursively(&t,5);
+	insertRecursively(&t,1);
+	insertRecursively(&t,4);
+	insertRecursively(&t,15);
+	insertRecursively(&t,27);
+	insertRecursively(&t,16);
 	
 	find(t,5);
 	find(t,12);
