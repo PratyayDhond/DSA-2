@@ -19,3 +19,4 @@ int isEmpty(BinarySearchTree bst);
 int countLeaves(BinarySearchTree bst);
 int countInternalNodes(BinarySearchTree bst);
 void displayAncestors(BinarySearchTree bst, int key);
+void insertRecursively(BinarySearchTree *t, int key);
