@@ -5,6 +5,29 @@ void initBst(BinarySearchTree *t){
 	return;
 }
 
+Node * createNewNode(int key){
+	Node* nn = (Node*) malloc(sizeof(Node));
+	nn -> data = key;
+	nn -> left = nn -> right = NULL;
+	return nn;
+}
+
+Node * insertRecursivelyImplementation(Node *t, int key){
+	if(!t)
+		return createNewNode(key);
+	else if(t->data == key)
+		return t ;//return NULL;
+	else if(t->data > key)
+		t->left = insertRecursivelyImplementation(t->left,key);
+	else
+		t->right = insertRecursivelyImplementation(t->right ,key);
+	return t;
+}
+
+void insertRecursively(BinarySearchTree * t, int key){
+	*t = insertRecursivelyImplementation(*t, key);
+}
+
 void insert(BinarySearchTree *bst, int data){
 	Node *nn = (Node *) malloc(sizeof(Node));
 	if(!nn)
