@@ -13,6 +13,7 @@ Node* createNewNode(int key){
 	Node * nn = (Node*) malloc(sizeof(Node));
 	nn->data = key;
 	nn->left = nn->right = NULL;
+	return nn;
 }
 
 void initBT(BT *t){
