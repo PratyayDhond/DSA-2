@@ -28,21 +28,40 @@ void insertRecursively(BinarySearchTree * t, int key){
 	*t = insertRecursivelyImplementation(*t, key);
 }
 
-void insert(BinarySearchTree *bst, int data){
+
+void insert(BinarySearchTree *bst, int key){
+	Node *t = *bst;
+	if(!bst){
+		t = createNewNode(key);
+		return;
+	}
+
+	if(t->data == key)
+		return;
+	if(t->data > key)
+		if(!t->left)
+			insert(&(t->left),key);
+	else
+		if(!t->right)
+			insert(&(t->right),key);
+	return;
+}
+
+void insert1(BinarySearchTree *bst, int data){
 	Node *nn = (Node *) malloc(sizeof(Node));
 	if(!nn)
 		return;
 	nn -> data = data;
 	nn -> left = nn -> right = NULL;
-	
+
 	if(*bst == NULL){
 		*bst = nn;
 		return;
 	}
-	
+
 	Node * p = *bst;
 	Node * q = NULL;
-	
+
 	while(p){
 	 	q = p;
 		if(p -> data == data)
@@ -52,24 +71,24 @@ void insert(BinarySearchTree *bst, int data){
 		else
 			p = p -> right;
 	}
-	
+
 	if(q->data > data)
 		q->left = nn;
 	else
 		q->right = nn;
-	
-	return;		
+
+	return;
 }
 
 int search(BinarySearchTree bst, int data){
-	
+
 	if(bst == NULL)
 		return 0;
-	
+
 	Node *p = bst;
-	
+
 	while(p){
-	
+
 		if(p->data == data)
 			return 1;
 		if(p->data > data)
@@ -88,13 +107,13 @@ void displayInorder(BinarySearchTree bst){
 	displayInorder(bst->left);
 	printf("%d ",bst->data);
 	displayInorder(bst->right);
-return;	
+return;
 }
 
 void displayPreorder(BinarySearchTree bst){
 	if(!bst)
 		return;
-	
+
 	printf("%d ", bst -> data );
 	displayPreorder(bst->left);
 	displayPreorder(bst->right);
@@ -108,7 +127,7 @@ void displayPostorder(BinarySearchTree bst){
 	displayPreorder(bst->left);
 	displayPreorder(bst->right);
 	printf("%d ", bst -> data );
-return;	
+return;
 }
 
 int isEmpty(BinarySearchTree bst){
@@ -122,19 +141,19 @@ int countLeaves(BinarySearchTree bst){
 	if(!bst)
 		return 0;
 	if(!(bst->right) && !(bst->left)){
-		return 1;	
-	}
+		return 1;
+	}	
 	return countLeaves(bst->left) + countLeaves(bst->right);
 }
 
 int countInternalNodes(BinarySearchTree bst){
 	if(!bst)
 		return 0;
-	
+
 	if(bst->right || bst -> left)
 		return 1 + countInternalNodes(bst->right) + countInternalNodes(bst->left);
 	else
-		return 0;	
+		return 0;
 }
 
 
@@ -159,4 +178,39 @@ void displayAncestors(BinarySearchTree bst, int data){
 	}
 	printAncestors(bst,data);
 	return;
-}	
+}
+
+void deleteNode(BinarySearchTree *bst, int key){
+	if(!bst || !(*bst))
+		return;
+
+	Node * p = *bst;
+	Node * q = NULL;
+
+	while(p){
+		if(p->data == key)
+			break;
+		q = p;
+		if(p->data > key)
+			p = p -> left;
+		else
+			p = p -> right;
+	}
+
+	if(!p)
+		return;
+
+	if(!p->left && !p->right){
+		if(q == NULL)
+			*bst = NULL;
+		else if(q->left == p)
+			q->left = NULL;
+		else
+			q->right = NULL;
+		free(p);
+		return;
+	}
+
+	// Node with 1 child
+
+}

@@ -1,5 +1,12 @@
 {
     "files.associations": {
-        "bst.h": "c"
+        "bst.h": "c",
+        "stdio.h": "c",
+        "limits.h": "c",
+        "array": "c",
+        "memory": "c",
+        "functional": "c",
+        "tuple": "c",
+        "utility": "c"
     }
 }

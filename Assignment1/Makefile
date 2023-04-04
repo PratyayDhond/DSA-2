@@ -1,10 +1,8 @@
 run:
 	gcc *.c
 	./a.out input1.txt 10 500
-	n = read()
 	./a.out input1.txt $n	
 	./a.out input1.txt 100 500
-	n = read()
 	./a.out input1.txt $n
 	./a.out input1.txt 1000 50000
 	./a.out input1.txt 234	

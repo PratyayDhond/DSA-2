@@ -22,6 +22,16 @@ int main(){
 	insertRecursively(&t,4);
 	insertRecursively(&t,15);
 	insertRecursively(&t,27);
+	insertRecursively(&t,26);
+	insertRecursively(&t,23);
+	insertRecursively(&t,218);
+	insertRecursively(&t,22);
+	insertRecursively(&t,25);
+	insertRecursively(&t,21);
+	insertRecursively(&t,24);
+	insertRecursively(&t,215);
+	insertRecursively(&t,227);
+	insertRecursively(&t,216);
 	insertRecursively(&t,16);
 	
 	find(t,5);
@@ -41,9 +51,10 @@ int main(){
 	printf("Number of leaves: %d\n", countLeaves(t));
 	printf("Number of internal Nodes: %d\n", countInternalNodes(t));
 	
-	printf("Ancestors of 16: ");
-	displayAncestors(t, 16);
-	printf("\n");
+	int kid = 2161;
+	printf("Ancestors of : %d -> ",kid);
+	displayAncestors(t, kid);
+	printf("NULL\n");
 
 	return 0;
 }
