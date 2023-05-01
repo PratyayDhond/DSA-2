@@ -12,5 +12,6 @@ void initAVL(AVL*);
 void insertAVL(AVL*,char*); 
 void traverse(AVL);
 int getHeight(Node*);
-void removeNodeFromAVL(AVL*);
+void removeAVL(AVL* avl, char* name);
+void destroyAVL(AVL* avl);
 Node* searchInAVL(AVL);

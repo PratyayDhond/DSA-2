@@ -1,3 +1,3 @@
 run:
-	gcc -g *.c
+	gcc -g -Wall *.c
 	./a.out
