@@ -1,6 +1,7 @@
 #include "avl.h"
 #include<stdlib.h>
 #include<stdio.h>
+#include<string.h>
 
 #define GOLEFT 99
 #define GORIGHT 101
@@ -60,46 +61,139 @@ return nn;
 }
 
 int keyCompare(char * name1, char * name2){
-    char * p = name1;
-    char * q = name2;
-    while(*p != '\0' || *q != '\0'){
-        if(*p > *q)
-            return GOLEFT;
-        if(*p < *q)
-            return GORIGHT;
-        p++;
-        q++;
-    }
-    if(*p == '\0' && *q == '\0')
+    int comparison = strcmp(name1,name2);
+    if(comparison == 0)
         return ALREADYEXISTS;
-    // if a key is of greater size than the other it definitely has to go right
-    else if(*p == '\0' && *q != '\0')
-        return GORIGHT;
-    // the key is of shorter length so go left
-    else if(*p != '\0' && *q == '\0' )
+    if(comparison > 0)
         return GOLEFT;
+    else
+        return GORIGHT;
+}
+
+void LL_ROTATE(AVL *t, Node *imbalancedNode){
+    Node * leftNode = imbalancedNode->left;
+    Node * leftRightNode = leftNode->right;
+    Node * ImbalanceParent = imbalancedNode->parent;
+    leftNode->parent = ImbalanceParent;
+
+    if(ImbalanceParent == NULL)
+        *t = leftNode;
+    else{
+        imbalancedNode->parent = leftNode;
+        if(ImbalanceParent->right == imbalancedNode)
+            ImbalanceParent->right = leftNode;
+        else
+            ImbalanceParent->left = leftNode;
+    }
+    imbalancedNode->parent = leftNode;
+    leftNode->right = imbalancedNode;
+    imbalancedNode->left = leftRightNode;
+    if(leftRightNode)
+        leftRightNode->parent = imbalancedNode;
+    return;
+}
+
+void RR_ROTATE(AVL *t, Node *imbalanceNode){
+    Node * rightNode = imbalanceNode->right;
+    Node * rightLeftNode = rightNode->left;
+    Node * imbalaceParent = imbalanceNode->parent;
+    rightNode->parent = imbalaceParent;
+    if(imbalaceParent == NULL){
+        *t = rightNode;
+    }else{
+        imbalanceNode->parent = rightNode;
+        if(imbalaceParent -> right == imbalanceNode)
+            imbalaceParent->right = rightNode;
+        else
+            imbalaceParent->left = rightNode;
+    }
+    imbalanceNode->parent = rightNode;
+    rightNode->left = imbalanceNode;
+    imbalanceNode->right
+     = rightLeftNode;
+    if(rightLeftNode)
+        rightLeftNode->parent = imbalanceNode;
+    return;
+}
+
+void LR_ROTATE(AVL *t, Node * imbalanceNode){
+    RR_ROTATE(t,imbalanceNode->left);
+    LL_ROTATE(t,imbalanceNode);
+}
+
+void RL_ROTATE(AVL *t, Node* imbalanceNode){
+    LL_ROTATE(t,imbalanceNode->right);
+    RR_ROTATE(t,imbalanceNode);
 }
 
 void insertAVL(AVL* avl,char* name){
     Node *t = *avl;
-    if(!t){
+    if(!t){ 
         Node * nn = createNewNode(name);
         if(!nn) return;
         *avl = nn;
         return;
     }
-    int comparison = keyCompare(t->key, name); 
-    if(comparison == ALREADYEXISTS)
-        return;
-    else if(comparison == GOLEFT)
-        insertAVL(&(t->left),name);
-    else
-        insertAVL(&(t->right),name);
+    Node *p = t;
+    Node *q = NULL;
+    while(p){
+        int comparison = keyCompare(p->key, name); 
+        if(comparison == ALREADYEXISTS)
+            return;
+        q = p;
+        if(comparison == GOLEFT){
+            p = p->left;
+        }else{
+            p = p -> right;
+        }
+    }
+    if(keyCompare(q->key,name) == GOLEFT){
+        q->left = createNewNode(name);
+        q->left->parent = q;
+    }
+    else{
+        q->right = createNewNode(name);
+        q->right->parent = q;
+    }    
+
+    while(q){
+
+        q->bf = getHeight(q->left) - getHeight(q->right);
+        if(q->bf == 0)
+            return;
+        // Insertion was done in the left
+        else if(q->bf > 1)
+        {
+            // check if the inserted node is greater than q->left
+            if(keyCompare(q->left->key, name) == GOLEFT)
+                LL_ROTATE(avl,q);
+            else
+                // continue;
+                LR_ROTATE(avl,q);
+
+        }else if(q->bf < -1){
+            if(keyCompare(q->right->key,name) == GOLEFT)
+                RL_ROTATE(avl,q);
+            else{
+                RR_ROTATE(avl,q);
+            }
+
+        }
+        q->bf = getHeight(q->left) - getHeight(q->right);
+
+        q = q->parent;
+    }
+
 } 
 
-void inorderAVL(Node * t){
+void traverse(Node * t){
     if(!t) return;
-    inorderAVL(t->left);
-    printf("%s ",t->key);
-    inorderAVL(t->right);
+    traverse(t->left);
+    printf("%s -> ",t->key);
+    if(t->parent)
+        printf("%s -> ",t->parent->key);
+    else
+        printf("NULL -> ");
+    printf("%d \n",t->bf);
+    traverse(t->right);
 }

@@ -10,7 +10,7 @@ typedef Node * AVL;
 
 void initAVL(AVL*);
 void insertAVL(AVL*,char*); 
-void inorderAVL(AVL);
+void traverse(AVL);
 int getHeight(Node*);
 void removeNodeFromAVL(AVL*);
 Node* searchInAVL(AVL);
