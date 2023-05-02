@@ -7,6 +7,8 @@
 #define GORIGHT 101
 #define ALREADYEXISTS 100
 
+void adjust_bf(AVL *avl, Node *t,char *name);
+
 void initAVL(AVL *t){
     *t = NULL;
     return;
@@ -121,25 +123,55 @@ void RL_ROTATE(AVL *t, Node* imbalanceNode){
 void adjust_bf(AVL *avl, Node *t,char *name){
     Node *p = t;
     while(p){
+        printf("Adjust Node called on %s ->> ",p->key);
+        if(p->parent)
+            printf("%s\n",p->parent->key);
+        else
+            printf("NULL \n");
         p->bf = getHeight(p->left) - getHeight(p->right);
-        printf(" %d ",p->bf);
-        if(p->bf > 1){
-            // check if the inserted node is greater than q->left
-            if(keyCompare(p->left->key, name) == GOLEFT)
+        // 
+            // if (unbal->bf == 2 && unbal->left->bf == 1)
+    //   LL_rotation(t, &unbal);
+    // else if (unbal->bf == 2 && unbal->left->bf == -1)
+    //   LR_rotation(t, &unbal);
+    // else if (unbal->bf == 2 && unbal->right->bf == 1)
+    //   RR_rotation(t, &unbal);
+    // else if (unbal->bf == 2 && unbal->right->bf == -1)
+    //   RL_rotation(t, &unbal);
+// 
+    // printf("Going in for the rotation");
+        if(p->bf == 2){
+            if(p->left->bf == 1)
                 LL_ROTATE(avl,p);
             else
-                // continue;
                 LR_ROTATE(avl,p);
-
-        }else if(p->bf < -1){
-            if(keyCompare(p->right->key,name) == GOLEFT)
-                RL_ROTATE(avl,p);
-            else{
+        }else if(p->bf == -2){
+            if(p->right->bf == 1)
                 RR_ROTATE(avl,p);
-            }
-
+            else
+                RL_ROTATE(avl,p);
         }
+    // printf("Out of the rotation");
+
+    p->bf = getHeight(p->left) - getHeight(p->right);
+        // if(p->bf > 1){
+            // check if the inserted node is greater than q->left
+            // if(keyCompare(p->left->key, name) == GOLEFT)
+                // LL_ROTATE(avl,p);
+            // else
+                // LR_ROTATE(avl,p);
+// 
+        // }else if(p->bf < -1){
+            // if(keyCompare(p->right->key,name) == GOLEFT)
+                // RL_ROTATE(avl,p);
+            // else{
+                // RR_ROTATE(avl,p);
+            // }
+// 
+        // }
         p = p->parent;
+        if(p == NULL)
+            return;
     }
 }
 
@@ -284,20 +316,39 @@ void removeAVL(AVL* avl, char* name){
         return;
     }
 
-    Node * parent = NULL;
-    while(r->right){
-        parent = r;
-        r = r -> right;
+    if(p->right && p->left){
+        Node * parent, *temp;
+        parent = p->left;
+        temp = parent->right;
+        if(!temp){
+            strcpy(p->key,parent->key);
+            p->left = parent->left;
+        }else{
+            while(temp->right){
+                parent = temp;
+                temp = temp->right;
+            }
+            strcpy(p->key,temp->key);
+            parent->right = NULL;
+            free(temp);
+        }
+    adjust_bf(avl,parent,name);
+    return;
     }
-    p->key = r->key;
-    parent->right = r->left;
-    if(parent->right)   
-        parent->right->parent = parent;
+
+    // Node * parent = p;
+    // while(r->right){
+    //     parent = r;
+    //     r = r -> right;
+    // }
+    // p->key = r->key;
+    // parent->right = r->left;
+    // if(parent->right)   
+    //     parent->right->parent = parent;
     // parent = r->left;
     // traverse(*avl);
     // free(r);
-    free(r);  
-    adjust_bf(avl,parent,name);
+    // free(r);  
 return;
 }
 
