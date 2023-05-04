@@ -1,6 +1,6 @@
 #include "bt.h"
 #include "bst.h"
-
+#include<limits.h>
 void insertRandomNumbersIntoFile(char* filename, int noOfRecords, int maxValue){
 	// printf("%s, %d, %d",filename, noOfRecords, maxValue);
 	FILE *fptr;
@@ -41,22 +41,40 @@ if(charc == 4){
 	FILE *fptr;
 	fptr = fopen(filename, "r+");
 	int no;
+	int max = INT_MIN;
 	while(fscanf(fptr,"%d",&no)){
 	//	printf("%d ", no);
 		if(feof(fptr)) 
         	break ;
 		insertBT(&t,no);
 		insertBst(&bst,no);
+		if(no > max)
+			max = no;
 		
 	}
 	int key = getNumber(argv[2]);
 	int BtComparisonCount = 0;
 	int BstComparisonCount = 0;
+	int n = key;
+	int avgBTComparisons = 0;
+	int avgBSTComparisons = 0;
 	int gotDataFlag = 0;
-	searchBT(t, key, &BtComparisonCount, &gotDataFlag);
-	getSearchCountBst(t, key, &BstComparisonCount);
-	printf("Binary Tree Comparisons :  %d\n",BtComparisonCount);
-	printf("Bianry Search Tree Comparisons:  %d\n",BstComparisonCount);	
+	for(int i = 0; i < n ; i++){
+		key = rand() % max;
+		searchBT(t, key, &BtComparisonCount, &gotDataFlag);
+		getSearchCountBst(t, key, &BstComparisonCount);
+		avgBTComparisons += BtComparisonCount;
+		avgBSTComparisons += BstComparisonCount;
+		BtComparisonCount = 0;
+		BstComparisonCount = 0;
+	}
+		
+	avgBTComparisons /= n;
+	avgBSTComparisons /= n;
+	
+	
+	printf("Binary Tree Comparisons :  %d\n",avgBTComparisons);
+	printf("Bianry Search Tree Comparisons:  %d\n",avgBSTComparisons);	
 	
 }
 //	numberOfRecords, maxValue
