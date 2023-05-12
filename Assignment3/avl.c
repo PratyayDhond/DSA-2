@@ -73,7 +73,7 @@ void LL_ROTATE(AVL *t, Node *imbalancedNode){
     if(ImbalanceParent == NULL)
         *t = leftNode;
     else{
-        imbalancedNode->parent = leftNode;
+        // imbalancedNode->parent = leftNode;
         if(ImbalanceParent->right == imbalancedNode)
             ImbalanceParent->right = leftNode;
         else
@@ -123,55 +123,31 @@ void RL_ROTATE(AVL *t, Node* imbalanceNode){
 void adjust_bf(AVL *avl, Node *t,char *name){
     Node *p = t;
     while(p){
-        printf("Adjust Node called on %s ->> ",p->key);
-        if(p->parent)
-            printf("%s\n",p->parent->key);
-        else
-            printf("NULL \n");
+        // else
+            // printf("NULL \n");
+        //
         p->bf = getHeight(p->left) - getHeight(p->right);
-        // 
-            // if (unbal->bf == 2 && unbal->left->bf == 1)
-    //   LL_rotation(t, &unbal);
-    // else if (unbal->bf == 2 && unbal->left->bf == -1)
-    //   LR_rotation(t, &unbal);
-    // else if (unbal->bf == 2 && unbal->right->bf == 1)
-    //   RR_rotation(t, &unbal);
-    // else if (unbal->bf == 2 && unbal->right->bf == -1)
-    //   RL_rotation(t, &unbal);
-// 
-    // printf("Going in for the rotation");
-        if(p->bf == 2){
+        if(p->bf >= 2){
             if(p->left->bf == 1)
                 LL_ROTATE(avl,p);
-            else
+            else if(p->left->bf == -1)
                 LR_ROTATE(avl,p);
+            else 
+                LL_ROTATE(avl,p);
         }else if(p->bf == -2){
-            if(p->right->bf == 1)
+            
+            if(p->right->bf == -1 || p->right->bf == 0)
                 RR_ROTATE(avl,p);
-            else
+            else if(p->right->bf == 1)
                 RL_ROTATE(avl,p);
-        }
-    // printf("Out of the rotation");
+            else 
+                RR_ROTATE(avl,p);
 
-    p->bf = getHeight(p->left) - getHeight(p->right);
-        // if(p->bf > 1){
-            // check if the inserted node is greater than q->left
-            // if(keyCompare(p->left->key, name) == GOLEFT)
-                // LL_ROTATE(avl,p);
-            // else
-                // LR_ROTATE(avl,p);
-// 
-        // }else if(p->bf < -1){
-            // if(keyCompare(p->right->key,name) == GOLEFT)
-                // RL_ROTATE(avl,p);
-            // else{
-                // RR_ROTATE(avl,p);
-            // }
-// 
-        // }
+        }
+
+        p->bf = getHeight(p->left) - getHeight(p->right);
+        printf("%d------\n", p->bf);
         p = p->parent;
-        if(p == NULL)
-            return;
     }
 }
 
@@ -271,7 +247,9 @@ void removeAVL(AVL* avl, char* name){
     if(p->left && !p->right){ // p has only left child
         if(!q){
             *avl = p->left;
-            p->left->parent = (*avl)-> parent;
+            p->left->parent = NULL;
+            (*avl)->bf = 0;
+            // p->left->parent = (*avl)-> parent;
         }
         else if(q->left == p){
             q->left = p->left;
@@ -289,8 +267,9 @@ void removeAVL(AVL* avl, char* name){
 
     if(!p->left && p->right){ // p has only right child
         if(!q){
-            p->right->parent = (*avl)->parent;
             *avl = p->right;
+            p->right->parent = NULL;
+            (*avl)->bf = 0;
         }
         else if(q->left == p){
             q->left = p->right;
@@ -323,6 +302,8 @@ void removeAVL(AVL* avl, char* name){
         if(!temp){
             strcpy(p->key,parent->key);
             p->left = parent->left;
+            if(temp->left)
+                temp->left->parent = p;
         }else{
             while(temp->right){
                 parent = temp;
@@ -369,6 +350,7 @@ void destroy(Node * t){
         return;
     destroy(t->left);
     destroy(t->right);
+    free(t->key);
     free(t);
 return;
 }

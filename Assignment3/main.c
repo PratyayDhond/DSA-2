@@ -46,6 +46,13 @@ int main(){
                getHeight(avl);
                exit(0);
                break;
+         case 994526:
+               while(avl){
+                  if(avl -> bf >= 2 || avl -> bf <= -2)
+                     break;
+                  removeAVL(&avl,avl->key);
+               }
+               break;
          default:
             printf("Incorrect Input. Please select one of the following options.\n");
             system("clear");
