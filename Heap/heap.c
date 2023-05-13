@@ -5,7 +5,7 @@
 #define EMPTY_HEAP INT_MIN
 
 void initHeap(Heap* heap){
-    heap -> size = 100;
+    heap -> size = 1;
     heap -> arr = (int *) malloc(sizeof(int) * heap->size);
     heap -> rearIndex = -1;
 }
@@ -15,6 +15,16 @@ void swap(int *a, int *b){
     *a = *b;
     *b = temp;
     return;
+}
+
+int isEmpty(Heap h){
+    return h.rearIndex == -1;
+}
+int top(Heap *h){
+    if(isEmpty(*h))
+        return INT_MIN;
+
+    return h->arr[0];
 }
 
 void insert(Heap *heap, int key){
@@ -41,6 +51,48 @@ void insert(Heap *heap, int key){
     }while(i > 0); // i >= 0
 }
 
+void heapSort(Heap *h){
+    int count = h->rearIndex;
+    int temp;
+    while(h->rearIndex > 0){
+        temp = pop(h);
+        h->arr[h->rearIndex+1] = temp;
+    }
+    h->rearIndex = count;
+
+    for(int i = 0; i <= h->rearIndex; i++)
+        printf("%d ",h->arr[i]);
+
+}
+
+void heapify(Heap *h){
+    int i = 0;
+    int il,ir;
+    int max,maxi;
+    il = 2 * i + 1;
+    ir = 2 * i + 2;
+    while(il <= h->rearIndex){
+        if(ir > h->rearIndex)
+            maxi = il;
+        else{
+            if(h->arr[il] > h->arr[ir])
+                maxi = il;
+            else
+                maxi = ir;
+        }
+        if(h->arr[i] > h->arr[maxi])
+            return;
+        else{
+            swap(&h->arr[i],&h->arr[maxi]);
+            i = maxi;
+        }
+    il = 2 * i + 1;
+    ir = 2 * i + 2;
+    }
+    return;
+}
+
+        
 int pop(Heap *heap){
     if(heap -> rearIndex == -1)
         return EMPTY_HEAP;
@@ -48,16 +100,6 @@ int pop(Heap *heap){
     heap->arr[0] = heap-> arr[heap->rearIndex];
     heap->rearIndex--;
     int i = 0;
-    while(2*i+2 <= heap->rearIndex){
-        if(heap->arr[i] >= heap->arr[2*i+1] && heap->arr[i] >= heap->arr[2*i+2])
-            break;
-        if(heap -> arr[2*i+1] > heap -> arr[2*i+2]){
-            swap(&heap->arr[i],&heap->arr[2*i+1]);
-            i = 2 * i + 1;
-        }else{
-            swap(&heap->arr[i],&heap->arr[2*i+2]);
-            i = 2 * i + 2;
-        }        
-    }
+    heapify(heap);
     return key;
 }

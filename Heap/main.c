@@ -15,8 +15,6 @@ int main(){
         insert(&heap,current);
     }
 
-    while(heap.rearIndex >= 0){
-        printf("%d \n",pop(&heap));
-    }
+    heapSort(&heap);
 return 0;
 }
