@@ -95,7 +95,6 @@ void RR_ROTATE(AVL *t, Node *imbalanceNode){
     if(imbalaceParent == NULL){
         *t = rightNode;
     }else{
-        imbalanceNode->parent = rightNode;
         if(imbalaceParent -> right == imbalanceNode)
             imbalaceParent->right = rightNode;
         else
@@ -185,23 +184,26 @@ void insertAVL(AVL* avl,char* name){
     while(q){
 
         q->bf = getHeight(q->left) - getHeight(q->right);
-        if(q->bf == 0)
-            return;
+        if(q->bf == 0){
+            // return;
+        }
         // Insertion was done in the left
         else if(q->bf > 1)
         {
             // check if the inserted node is greater than q->left
-            if(keyCompare(q->left->key, name) == GOLEFT)
-                LL_ROTATE(avl,q);
-            else
-                // continue;
-                LR_ROTATE(avl,q);
-
+            // if(keyCompare(q->left->key, name) == GOLEFT)
+                if(q->left->bf == 1)
+                    LL_ROTATE(avl,q);
+                else
+                    // continue;
+                     LR_ROTATE(avl,q);
+    
         }else if(q->bf < -1){
-            if(keyCompare(q->right->key,name) == GOLEFT)
-                RL_ROTATE(avl,q);
-            else{
+            // if(keyCompare(q->right->key,name) == GOLEFT)
+            if(q->right->bf == -1)
                 RR_ROTATE(avl,q);
+            else{
+                RL_ROTATE(avl,q);
             }
 
         }
