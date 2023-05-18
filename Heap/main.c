@@ -10,11 +10,16 @@ int main(){
     scanf("%d",&n);
 
     int current;
-    while(n--){
+    int t = n;
+    while(t--){
         scanf("%d",&current);
         insert(&heap,current);
     }
 
     heapSort(&heap);
+    // int * ans = heapSortDesc(&heap);
+    // for(int i = 0; i < n; i++)
+        // printf("%d ",ans[i]);
+
 return 0;
 }

@@ -62,7 +62,18 @@ void heapSort(Heap *h){
 
     for(int i = 0; i <= h->rearIndex; i++)
         printf("%d ",h->arr[i]);
+    
 }
+
+int * heapSortDesc(Heap *h){
+    int *ans = (int *) malloc (sizeof(int) * h->rearIndex+1);
+    int n = h -> rearIndex+1;
+    for(int i = 0; i < n; i++){
+        ans[i] = pop(h);
+    }
+    return ans;
+}
+
 
 void heapify(Heap *h){
     int i = 0;
