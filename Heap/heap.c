@@ -62,7 +62,6 @@ void heapSort(Heap *h){
 
     for(int i = 0; i <= h->rearIndex; i++)
         printf("%d ",h->arr[i]);
-
 }
 
 void heapify(Heap *h){
