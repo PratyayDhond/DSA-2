@@ -3,6 +3,7 @@
 #include<stdio.h>
 #include<limits.h>
 #include "stack/stack.h"
+#include "queue/linkedQueue.h"
 
 void freeGraph(Graph *g, int index){
     if(!g)
@@ -163,4 +164,68 @@ void displayComponents(Graph g){
         printf("\n\n");
 
     }    
+}
+
+void dfs(Graph g, int start){
+    if(!g.arr)
+        return;
+    if(g.size <= 0)
+        return;
+    if(start < 0 || start >=g.size)
+        return;
+    
+
+    int * visited = (int *) calloc(g.size,sizeof(int));
+    
+    Stack s;
+    initStack(&s);
+
+    visited[start] = 0;
+    push(&s,start);
+    printf("DFS : ");
+    while(!isEmpty(s)){
+        int temp = pop(&s);
+        printf("%d ",temp);
+
+        for(int i = 0; i < g.size; i++){
+            if(g.arr[temp][i] && !visited[i]){
+                push(&s,i);
+                visited[i] = 1;
+            }
+        }
+    }
+    printf("\n");
+    return;
+}
+
+void bfs(Graph g, int start){
+    if(!g.arr)
+        return;
+    if(g.size <= 0)
+        return;
+    if(start < 0 || start >=g.size)
+        return;
+    
+    int * visited = (int *) calloc(g.size,sizeof(int));
+
+    Queue q;
+    initQueue(&q);
+
+    enqueue(&q,start);
+    visited[start] = 1;
+
+    printf("BFS : ");
+    while(!isEmptyQueue(q)){
+        int temp = dequeue(&q);
+        printf("%d ",temp);
+
+        for(int i = 0; i < g.size; i++){
+            if(g.arr[temp][i] && !visited[i]){
+                enqueue(&q,i);
+                visited[i] = 1;
+            }
+        }
+    }
+    printf("\n");
+    return;
 }

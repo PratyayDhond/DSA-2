@@ -20,5 +20,7 @@ int main(int argc, char * argv[]){
 
     displayComponents(g);
 
+    bfs(g,3);
+    
     return 0;
 }
