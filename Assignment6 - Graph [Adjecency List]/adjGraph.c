@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "stack/stack.h"
 #include "queue/linkedQueue.h"
+#include "Heap/heap.h"
 #include <ctype.h>
 #include <limits.h>
 
@@ -307,41 +308,120 @@ void displaySpanningTree(SpanningTree sp){
     }
 }
 
- /*
-void primsAlgorithm(Graph g,int v){
-   if(g.size == 0 || v >= g.size || v < 0 )
-        return ;
+SpanningTree * kruskals(Graph g){
+    if(g.size == 0 || !g.col)
+        return NULL;
+
+    int * visited = (int *) calloc(g.size,sizeof(int));
+    if(!visited)
+        return NULL;
+    Heap minHeap;
+    initHeap(&minHeap);
+
+    SpanningTree * spanningTree = initAdjecencyList(spanningTree,g.size);
+
+    int * set = (int *) calloc(g.size,sizeof(int));
+    if(!set)
+        return NULL;
+    for(int i = 0; i < g.size; i++){
+        set[i] = i;
+    }
+
+    for(int i = 0; i < g.size; i++){
+        GraphNode * temp = g.col[i];
+        visited[i] = 1;
+        while(temp){
+            if(!visited[temp->index])
+                insert(&minHeap,i,temp->index,temp->weight);                
+            temp = temp-> next;
+        }
+    }
+
+    int count = 0;
+    Data * top;
+    do{
+        top = popFromHeap(&minHeap);
+        if(top == NULL)
+            break;
+        printf("%c %c %d\n",top->node1+CHARACTER_START,top->node2+CHARACTER_START, top->weight);
+        if(set[top->node1] != set[top->node2]){
+            count += top->weight;
+            appendToSpanningTree(spanningTree,top->node1, top->node2, top->weight);
+            // if(isCharacter)
+            //     printf("%c %c - %d\n",top->node1+CHARACTER_START, top->node2+CHARACTER_START, top->weight); 
+            // else
+            //     printf("%d %d - %d\n",top->node1, top->node2, top->weight); 
+            int temp = set[top->node2];
+            int update = set[top->node1];
+            for(int i = 0; i < g.size; i++){
+                if(set[i] == temp)
+                    set[i] = update;
+            }   
+
+        }
+
+    }while(1);
+
+    spanningTree->totalWeight = count;
     
-    int totalWeight = 0;
-    int * visited = (int* )calloc(g.size,sizeof(int)); //calloc beacuse bydefault it makes it 0
+    return spanningTree;
+}
+
+
+ /*
+void kruskalsAlgorithm(Graph g){
+
+    // if(detectCycle(g)){
+        // removeCycle(&g);
+    // }   
+    int n = g.size;
+    minHeap heap;
+    initminHeap(&heap,n);
+    int countWeight = 0;
+    int visited = (int)calloc(g.size,sizeof(int)); //calloc beacuse bydefault it makes it 0
     if(!visited)
     return;
 
-    int tempWeight = 0;
-    int n = g.size;
+    int set = (int)calloc(g.size,sizeof(int)); //calloc beacuse bydefault it makes it 0
+    if(!set)
+    return;
+    
     for(int i = 0 ; i < n ; i++){
-        int minIndex = INT_MAX;
-        int Value = INT_MAX;
-        printf("%d ",v);
-        totalWeight += tempWeight  ;
-        
-        visited[v] = 1;
-        for(int j = 0 ; j < n ; j++){
-            if(visited[j]){
-            GraphNode * temp = g.col[j];
-            while(temp){
-                if(temp -> weight < Value && !visited[temp -> index]){
-                    Value = temp -> weight;
-                    minIndex = temp -> index;
-                }
-                temp = temp -> next;
-            }
-            }
-        }
-        v = minIndex;
-        tempWeight = Value;
+        set[i] = i ;
     }
-    printf("Weight : %d",totalWeight);
-    return ;        
+
+    for(int i = 0 ; i < n; i++){
+        Node* temp = g.column[i];
+        while (temp)
+        {   
+            visited[i] = 1;
+            if(visited[temp -> index] == 0) 
+            // printf("\nStart : %d  , end : %d , weight : %d\n",i,temp -> index,temp ->weight);
+            insert(&heap,i,temp -> index,temp -> weight);
+            temp = temp -> next;
+        }
+    }
+    int count = 0;
+    do{        
+        Data getTop = popNode(&heap);
+        if(getTop.weight == INT_MIN)
+            break;
+
+        if(set[getTop.start] != set[getTop.end] )
+        {
+            count += getTop.weight; 
+            printf("\nStart : %c  , end : %c , weight : %d\n",getTop.start+ 'A',getTop.end+'A',getTop.weight);
+            int temp = set[getTop.end];
+            int replace = set[getTop.start];
+            for(int i = 0 ; i < n; i++){
+                if(set[i] == temp)
+                    set[i] = replace;
+            }
+
+        }
+    }
+        while(1);
+        printf("\n%d Weight ", count);
+        return ;
 }
  */

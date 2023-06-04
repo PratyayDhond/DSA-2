@@ -29,5 +29,6 @@ void displayGraph(Graph g);
 void bfs(Graph g, int startIndex);
 void dfs(Graph g, int startIndex);
 SpanningTree * prims(Graph g, int v);   
+SpanningTree * kruskals(Graph g);
 void displaySpanningTree(SpanningTree sp);
 #endif

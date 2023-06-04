@@ -15,7 +15,9 @@ int main(){
     // printf("DFS : ");
     // dfs(g,0);
     // primsAlgorithm(g,0);
-    SpanningTree * sp = prims(g,4);
-    displaySpanningTree(*sp);
+    SpanningTree * kruskalTree = kruskals(g);
+    displaySpanningTree(*kruskalTree);
+    SpanningTree * primsTree = prims(g,4);
+    displaySpanningTree(*primsTree);
 return 0;
 }
