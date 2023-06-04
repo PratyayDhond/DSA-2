@@ -14,6 +14,11 @@ Node* newNode(int data){
     return nn;
 }
 
+int peek(Stack s){
+    if(isEmpty(s))
+        return INT_MIN;
+    return s.top->data;
+}
 void push(Stack *s, int data){
     Node *nn = newNode(data);
     if(s->top == NULL)

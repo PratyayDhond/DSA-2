@@ -12,4 +12,5 @@ typedef struct Stack
 void initStack(Stack *s);
 void push(Stack *s, int data);
 int pop(Stack *s);
+int peek(Stack s);
 int isEmpty(Stack s);

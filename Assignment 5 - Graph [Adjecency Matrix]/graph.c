@@ -133,7 +133,7 @@ void displayComponents(Graph g){
     int * visited = (int *) calloc(g.size, sizeof(int));
     int startVertex = 0;
     int i = 0;
-    printf("firstNode - SecondNode ->  Weight\n");
+    printf("\nfirstNode -> SecondNode -  Weight\n");
     for(; i < g.size; i++){ // this loop runs for the edge case that max n components are present in the graph
         int start = isVisited(visited,g.size);
         if(start == -1)
@@ -228,4 +228,47 @@ void bfs(Graph g, int start){
     }
     printf("\n");
     return;
+}
+
+void findAndPrintCycles(Graph g, int index,int * visited){
+    int * tempVisited = (int *) malloc(sizeof(int ) * g.size);
+    if(!tempVisited)
+        return;
+    visited[index] = 1;
+}
+
+void DFSCycles(Graph g, int startIndex, int visited[], int cycles[]){
+    visited[startIndex] = 1;
+    cycles[g.size] = startIndex;
+
+    for(int i = 0; i < g.size; i++){
+        if(g.arr[startIndex][i] && !visited[i] ){
+            DFSCycles(g,i,visited,cycles);
+        }
+    }
+    return;
+}
+
+void displayCycles(Graph g){
+
+    if(g.size == 0)
+        return;
+    
+    if(!g.arr)
+        return;
+    
+    int * visited = (int *) calloc(g.size, sizeof(int));
+    int * cycles = (int *) calloc(g.size, sizeof(int));
+
+    for(int i =0; i < g.size; i++){
+        if(!visited[i]){
+            DFSCycles(g,i,visited,cycles);
+            int j = 0;
+            while(cycles[j] != i){
+                printf("%d ",cycles[j]);
+                j++;
+            }
+            printf("%d\n",cycles[j]);
+        }
+    }
 }

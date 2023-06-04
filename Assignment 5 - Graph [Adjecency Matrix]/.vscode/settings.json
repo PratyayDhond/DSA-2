@@ -7,6 +7,7 @@
         "initializer_list": "c",
         "utility": "c",
         "random": "c",
-        "linkedqueue.h": "c"
+        "linkedqueue.h": "c",
+        "string": "c"
     }
 }
